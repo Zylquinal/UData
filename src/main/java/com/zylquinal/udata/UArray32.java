@@ -1,27 +1,27 @@
 package com.zylquinal.udata;
 
-public abstract class UArray extends UData {
+public abstract class UArray32 extends UData {
 
     protected final long bytes;
-    protected long size;
+    protected int size;
     protected long count;
 
-    public UArray(long bytes, long size) {
+    public UArray32(long bytes, int size) {
         super(bytes * size);
         this.bytes = bytes;
         this.size = size;
     }
 
-    public void grow() {
+    protected void grow() {
         var newSize = size + (Math.round(Math.ceil(size * 0.5)));
-        if (newSize < 0) { // overflow check
-            newSize = Long.MAX_VALUE;
+        if (newSize > Integer.MAX_VALUE) {
+            newSize = Integer.MAX_VALUE;
         }
-        resize(newSize);
+        resize((int) newSize);
     }
 
-    public void resize(long size) {
-        super.reallocate(this.bytes * size);
+    public void resize(int size) {
+        super.reallocate(bytes * size);
         this.size = size;
     }
 
@@ -34,7 +34,7 @@ public abstract class UArray extends UData {
         }
     }
 
-    public long getSize() {
+    public int getSize() {
         return size;
     }
 
